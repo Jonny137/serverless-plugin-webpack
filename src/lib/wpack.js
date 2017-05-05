@@ -9,12 +9,12 @@ const functions = require('./functions');
  * @param {string} servicePath Serverless service path
  * @returns {object} Webpack configuration
  */
-const setEntry = (fn, servicePath) =>
+const setEntry = (fn, servicePath, config) =>
   R.assoc(
     'entry',
     R.objOf(
-      functions.fnFilename(fn),
-      path.join(servicePath, functions.fnPath(fn))
+      functions.fnFilename(config)(fn),
+      path.join(servicePath, functions.fnPath(config)(fn))
     )
   );
 
@@ -46,7 +46,7 @@ const createConfigs = (fns, config, servicePath, defaultOutput, folder) =>
   R.map(
     fn =>
       R.pipe(
-        setEntry(fn, servicePath),
+        setEntry(fn, servicePath, config),
         setOutput(defaultOutput, path.join(servicePath, folder))
       )(config),
     R.values(fns)

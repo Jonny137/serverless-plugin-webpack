@@ -6,17 +6,17 @@ const handlerProp = R.prop('handler');
 
 const handlerExport = R.compose(R.last, R.split('.'));
 
-const handlerPath = handler => R.replace(handlerExport(handler), 'js', handler);
-const handlerFile = R.compose(path.basename, handlerPath);
-const fnPath = R.compose(handlerPath, handlerProp);
-const fnFilename = R.compose(handlerFile, handlerProp);
+const handlerPath = config => handler => R.replace(handlerExport(handler), config && config.entry ? config.entry : 'js', handler);
+const handlerFile = (config) => R.compose(path.basename, handlerPath(config));
+const fnPath = (config) => R.compose(handlerPath(config), handlerProp);
+const fnFilename = (config) => R.compose(handlerFile(config), handlerProp);
 
 const setPackage = fn =>
   R.assoc(
     'package',
     R.objOf(
       'include',
-      R.compose(list, fnFilename)(fn)
+      R.compose(list, fnFilename(config))(fn)
     ),
     fn
   );
