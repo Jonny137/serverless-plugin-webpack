@@ -14,7 +14,7 @@ const setEntry = (fn, servicePath, config) =>
     'entry',
     R.objOf(
       functions.fnFilename(config)(fn).replace(new RegExp(config && config.entry ? config.entry : 'js'), 'js'),
-      path.join(servicePath, functions.fnPath(config)(fn))
+      path.join(config && config.context ? config.context : servicePath, functions.fnPath(config)(fn))
     )
   );
 
