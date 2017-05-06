@@ -16,7 +16,7 @@ const setPackage = fn =>
     'package',
     R.objOf(
       'include',
-      R.compose(list, fnFilename(config))(fn)
+      R.compose(list, fnFilename(null))(fn)
     ),
     fn
   );

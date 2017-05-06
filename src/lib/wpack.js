@@ -13,7 +13,7 @@ const setEntry = (fn, servicePath, config) =>
   R.assoc(
     'entry',
     R.objOf(
-      functions.fnFilename(config)(fn),
+      functions.fnFilename(config)(fn).replace(new RegExp(config && config.entry ? config.entry : 'js'), 'js'),
       path.join(servicePath, functions.fnPath(config)(fn))
     )
   );
@@ -28,8 +28,9 @@ const setOutput = (defaultOutput, outputPath) =>
   R.assoc(
     'output',
     R.merge(
-      defaultOutput,
-      { path: outputPath }
+      defaultOutput, {
+        path: outputPath
+      }
     )
   );
 
@@ -45,10 +46,10 @@ const setOutput = (defaultOutput, outputPath) =>
 const createConfigs = (fns, config, servicePath, defaultOutput, folder) =>
   R.map(
     fn =>
-      R.pipe(
-        setEntry(fn, servicePath, config),
-        setOutput(defaultOutput, path.join(servicePath, folder))
-      )(config),
+    R.pipe(
+      setEntry(fn, servicePath, config),
+      setOutput(defaultOutput, path.join(servicePath, folder))
+    )(config),
     R.values(fns)
   );
 
