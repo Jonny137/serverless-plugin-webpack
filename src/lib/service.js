@@ -8,7 +8,7 @@ const setPackage = R.pipe(
   R.assoc('individually', true)
 );
 
-const fnPath = R.compose(R.replace(/\.[^.]+$/, '.js'), R.prop('handler'));
+const fnPath = (fn, fileExtension) => R.compose(R.replace(/\.[^.]+$/, fileExtension || '.js'), R.prop('handler'))(fn);
 
 const setFnsPackage = R.map(fn => appendPath(['package', 'include'], fnPath(fn))(fn));
 

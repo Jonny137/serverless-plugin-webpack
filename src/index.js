@@ -36,9 +36,9 @@ class ServerlessPluginWebpack {
 
     // Save original service path and functions
     this.originalServicePath = this.serverless.config.servicePath;
-    this.originalFunctions = type === 'function' ?
-      R.pick([this.options.function], this.serverless.service.functions) :
-      this.serverless.service.functions;
+    this.originalFunctions = type === 'function'
+      ? R.pick([this.options.function], this.serverless.service.functions)
+      : this.serverless.service.functions;
 
     // Fake service path so that serverless will know what to zip
     this.serverless.config.servicePath = path.join(this.originalServicePath, webpackFolder);
@@ -48,7 +48,6 @@ class ServerlessPluginWebpack {
 
     // Include bundle at function level
     this.serverless.service.functions = service.setFnsPackage(this.serverless.service.functions);
-
     // Run webpack
     return wpack.run(
       wpack.createConfigs(
@@ -75,14 +74,6 @@ class ServerlessPluginWebpack {
             dest,
             this.serverless.service.functions
           );
-
-          // Update artifacts path when packaging a service
-          if (type === 'service') {
-            this.serverless.service.functions = functions.setArtifacts(
-              path.join(this.originalServicePath, serverlessFolder),
-              this.serverless.service.functions
-            );
-          }
         }
       });
   }

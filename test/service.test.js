@@ -37,6 +37,8 @@ test('service package with existing package and include/exclude', () => {
 
 test('fnPath', () => {
   expect(service.fnPath(fns.firstGet)).toBe('functions/first/get.js');
+  expect(service.fnPath(fns.firstGet, '.js')).toBe('functions/first/get.js');
+  expect(service.fnPath(fns.firstGet, '.ts')).toBe('functions/first/get.ts');
 });
 
 test('setFnsPackage', () => {

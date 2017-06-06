@@ -7,14 +7,15 @@ const service = require('./service');
  * Sets webpack entry
  * @param {object} fn Serverless function object
  * @param {string} servicePath Serverless service path
+ * @param {string} fileExtension File extension for handler
  * @returns {object} Webpack configuration
  */
-const setEntry = (fn, servicePath, config) =>
+const setEntry = (fn, servicePath, fileExtension) => 
   R.assoc(
     'entry',
     R.objOf(
-      functions.fnFilename(config)(fn).replace(new RegExp(config && config.entry ? config.entry : 'js'), 'js'),
-      path.join(config && config.context ? config.context : servicePath, functions.fnPath(config)(fn))
+      service.fnPath(fn),
+      path.join(servicePath, service.fnPath(fn, fileExtension))
     )
   );
 
@@ -28,9 +29,8 @@ const setOutput = (defaultOutput, outputPath) =>
   R.assoc(
     'output',
     R.merge(
-      defaultOutput, {
-        path: outputPath
-      }
+      defaultOutput,
+      { path: outputPath }
     )
   );
 
@@ -46,10 +46,10 @@ const setOutput = (defaultOutput, outputPath) =>
 const createConfigs = (fns, config, servicePath, defaultOutput, folder) =>
   R.map(
     fn =>
-    R.pipe(
-      setEntry(fn, servicePath, config),
-      setOutput(defaultOutput, path.join(servicePath, folder))
-    )(config),
+      R.pipe(
+        setEntry(fn, config.context || servicePath, config.entry),
+        setOutput(defaultOutput, path.join(servicePath, folder))
+      )(config),
     R.values(fns)
   );
 
