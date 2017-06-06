@@ -1,7 +1,7 @@
 const fs = require('fs-extra');
 const path = require('path');
 const R = require('ramda');
-const functions = require('./lib/functions');
+const service = require('./lib/service');
 const wpack = require('./lib/wpack');
 
 // Folders
@@ -36,23 +36,18 @@ class ServerlessPluginWebpack {
 
     // Save original service path and functions
     this.originalServicePath = this.serverless.config.servicePath;
-    this.originalFunctions = type === 'function'
-      ? R.pick([this.options.function], this.serverless.service.functions)
-      : this.serverless.service.functions;
+    this.originalFunctions = type === 'function' ?
+      R.pick([this.options.function], this.serverless.service.functions) :
+      this.serverless.service.functions;
 
     // Fake service path so that serverless will know what to zip
     this.serverless.config.servicePath = path.join(this.originalServicePath, webpackFolder);
 
     // Package individually and exclude everything at the service level
-    this.serverless.service.package = {
-      individually: true,
-      exclude: ['*'],
-    };
+    this.serverless.service.package = service.setPackage(this.serverless.service.package);
 
-    // Include bundle and update handler at function level
-    this.serverless.service.functions = functions.setPackageAndHandler(
-      this.serverless.service.functions
-    );
+    // Include bundle at function level
+    this.serverless.service.functions = service.setFnsPackage(this.serverless.service.functions);
 
     // Run webpack
     return wpack.run(
@@ -70,13 +65,16 @@ class ServerlessPluginWebpack {
     // Restore service path
     this.serverless.config.servicePath = this.originalServicePath;
 
-    // Copy .webpack to .serverless
-    return new Promise((resolve, reject) => {
-      fs.copy(
-        path.join(this.originalServicePath, webpackFolder, serverlessFolder),
-        path.join(this.originalServicePath, serverlessFolder),
-        (err) => {
-          if (err) reject(err);
+    // Copy .webpack/.serverless to .serverless and remove .webpack
+    const src = path.join(this.originalServicePath, webpackFolder, serverlessFolder);
+    const dest = path.join(this.originalServicePath, serverlessFolder);
+    return fs.copy(src, dest)
+      .then(() => {
+        if (type === 'service') {
+          this.serverless.service.functions = service.setFnsArtifacts(
+            dest,
+            this.serverless.service.functions
+          );
 
           // Update artifacts path when packaging a service
           if (type === 'service') {
@@ -85,14 +83,8 @@ class ServerlessPluginWebpack {
               this.serverless.service.functions
             );
           }
-
-          // Remove webpack folder
-          fs.removeSync(path.join(this.originalServicePath, webpackFolder));
-
-          resolve();
         }
-      );
-    });
+      });
   }
 }
 

@@ -1,7 +1,7 @@
 const path = require('path');
 const R = require('ramda');
 const webpack = require('webpack'); // eslint-disable-line import/no-unresolved
-const functions = require('./functions');
+const service = require('./service');
 
 /**
  * Sets webpack entry
