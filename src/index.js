@@ -77,6 +77,7 @@ class ServerlessPluginWebpack {
             this.serverless.service.functions
           );
         }
+        return fs.remove(path.join(this.originalServicePath, webpackFolder));
       });
   }
 }
