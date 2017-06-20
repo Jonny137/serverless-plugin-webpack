@@ -1,6 +1,6 @@
 {
   "name": "serverless-plugin-webpack",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Serverless Plugin Webpack",
   "main": "src/index.js",
   "repository": {
@@ -41,6 +41,6 @@
     "jest": "^20.0.1"
   },
   "peerDependencies": {
-    "webpack": "2.x"
+    "webpack": "2.x || 3.x"
   }
 }
