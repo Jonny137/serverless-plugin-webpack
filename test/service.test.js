@@ -2,11 +2,16 @@ const path = require('path');
 const service = require('../src/lib/service');
 const fns = require('./fns.js');
 
-test('service package when no package', () => {
-  const expectedPackage = {
-    individually: true,
-    exclude: ['**'],
-  };
+const expectedPackage = {
+  individually: true,
+  exclude: ['**'],
+};
+
+test('service package when package is undefined', () => {
+  expect(service.setPackage(undefined)).toEqual(expectedPackage);
+});
+
+test('service package when package is an empty object', () => {
   expect(service.setPackage({})).toEqual(expectedPackage);
 });
 
@@ -14,9 +19,14 @@ test('service package with existing package and no include/exclude', () => {
   const existingPackage = {
     individually: false,
   };
-  const expectedPackage = {
-    individually: true,
-    exclude: ['**'],
+  expect(service.setPackage(existingPackage)).toEqual(expectedPackage);
+});
+
+test('service package with existing package and undefined include/exclude', () => {
+  const existingPackage = {
+    individually: false,
+    include: undefined,
+    exclude: undefined,
   };
   expect(service.setPackage(existingPackage)).toEqual(expectedPackage);
 });
@@ -27,12 +37,12 @@ test('service package with existing package and include/exclude', () => {
     include: ['node_modules/**'],
     exclude: ['*.txt'],
   };
-  const expectedPackage = {
+  const expectedPackageIncExc = {
     individually: true,
-    include: ['node_modules/**'],
-    exclude: ['*.txt', '**'],
+    include: ['../node_modules/**'],
+    exclude: ['../*.txt', '**'],
   };
-  expect(service.setPackage(existingPackage)).toEqual(expectedPackage);
+  expect(service.setPackage(existingPackage)).toEqual(expectedPackageIncExc);
 });
 
 test('fnPath', () => {
@@ -46,22 +56,21 @@ test('setFnsPackage', () => {
     firstGet: {
       handler: 'functions/first/get.handler',
       package: {
-        include: ['node_modules/**', 'functions/first/get.js'],
-        exclude: ['abc.js'],
+        include: ['../node_modules/**', 'functions/first/get.js'],
+        exclude: ['../abc.js'],
       },
     },
     secondGet: {
       handler: 'functions/second/get.handler',
       package: {
-        include: ['node_modules/**', 'functions/second/get.js'],
-        exclude: ['abc.js'],
+        include: ['functions/second/get.js'],
       },
     },
     post: {
       handler: 'functions/post.handler',
       package: {
         include: ['functions/post.js'],
-        exclude: ['*.sql'],
+        exclude: ['../*.sql', '!../test.sql'],
       },
     },
   };
