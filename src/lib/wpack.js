@@ -47,7 +47,7 @@ const createConfigs = (fns, config, servicePath, defaultOutput, folder) =>
     fn =>
       R.pipe(
         setEntry(fn, servicePath),
-        setOutput(defaultOutput, path.join(servicePath, 'src', folder))
+        setOutput(defaultOutput, path.join(servicePath, folder))
       )(config),
     R.values(fns)
   );
