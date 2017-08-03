@@ -25,8 +25,6 @@ class ServerlessPluginWebpack {
       'after:package:createDeploymentArtifacts': () => this.restoreAndCopy('service'),
       'before:deploy:function:packageFunction': () => this.webpackBundle('function'),
       'after:deploy:function:packageFunction': () => this.restoreAndCopy('function'),
-      'before:invoke:local:invoke': () => this.webpackBundle('function'),
-      // 'after:invoke:local:invoke': () => this.restoreAndCopy('function'),
     };
   }
 
@@ -54,6 +52,7 @@ class ServerlessPluginWebpack {
 
     // Include bundle at function level
     this.serverless.service.functions = service.setFnsPackage(this.serverless.service.functions);
+
     // Run webpack
     return wpack.run(
       wpack.createConfigs(
