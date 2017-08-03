@@ -13,7 +13,7 @@ const setEntry = (fn, servicePath) =>
   R.assoc(
     'entry',
     R.objOf(
-      service.fnPath(fn),
+      service.fnPath(fn).replace(new RegExp('.ts$'), '.js'),
       path.join(servicePath, 'src',   service.fnPath(fn))
     )
   );
