@@ -24,7 +24,7 @@ class ServerlessPluginWebpack {
       'before:package:createDeploymentArtifacts': () => this.webpackBundle('service'),
       'after:package:createDeploymentArtifacts': () => this.restoreAndCopy('service'),
       'before:deploy:function:packageFunction': () => this.webpackBundle('function'),
-      'after:deploy:function:packageFunction': () => this.restoreAndCopy('function'),
+      // 'after:deploy:function:packageFunction': () => this.restoreAndCopy('function'),
     };
   }
 
