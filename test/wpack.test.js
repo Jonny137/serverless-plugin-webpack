@@ -52,8 +52,49 @@ const configs = [
 ];
 
 test('createConfigs', () => {
-  expect(wpack.createConfigs(fns, config, servicePath, defaultOutput, folder)).toEqual(configs);
+  expect(wpack.createConfigs(fns, config, servicePath, defaultOutput, folder, '.js', '')).toEqual(configs);
 });
+
+const typescriptConfigs = [
+  {
+    entry: {
+      'functions/first/get.js': path.join(servicePath, 'src' ,'functions/first/get.ts'),
+    },
+    output: {
+      libraryTarget: 'commonjs2',
+      path: path.join(servicePath, folder),
+      filename: '[name]',
+    },
+    externals: [/aws-sdk/],
+  },
+  {
+    entry: {
+      'functions/second/get.js': path.join(servicePath, 'src' ,'functions/second/get.ts'),
+    },
+    output: {
+      libraryTarget: 'commonjs2',
+      path: path.join(servicePath, folder),
+      filename: '[name]',
+    },
+    externals: [/aws-sdk/],
+  },
+  {
+    entry: {
+      'functions/post.js': path.join(servicePath, 'src' ,'functions/post.ts'),
+    },
+    output: {
+      libraryTarget: 'commonjs2',
+      path: path.join(servicePath, folder),
+      filename: '[name]',
+    },
+    externals: [/aws-sdk/],
+  },
+];
+
+test('createConfigsWithTypescript', () => {
+  expect(wpack.createConfigs(fns, config, servicePath, defaultOutput, folder, '.ts', 'src')).toEqual(typescriptConfigs);
+});
+
 
 describe('run', () => {
   require('webpack'); // eslint-disable-line global-require, import/no-unresolved

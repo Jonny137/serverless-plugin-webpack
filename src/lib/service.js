@@ -12,7 +12,7 @@ const setPackage = R.pipe(
   R.assoc('individually', true)
 );
 
-const fnPath = R.compose(R.replace(/\.[^.]+$/, '.ts'), R.prop('handler'));
+const fnPath = R.compose(R.replace(/\.[^.]+$/, '.js'), R.prop('handler'));
 
 const setFnsPackage = R.map(
   R.pipe(
@@ -27,7 +27,7 @@ const setFnsPackage = R.map(
 const setFnsArtifacts = (serverlessPath, fns) => R.map(
   R.over(
     R.lensProp('package'),
-    package => path.join(serverlessPath, path.basename(package.artifact))
+    p => path.join(serverlessPath, path.basename(p.artifact))
   ),
   fns
 );

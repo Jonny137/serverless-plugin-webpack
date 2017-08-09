@@ -77,4 +77,13 @@ module.exports = {
 };
 ```
 
+## Typescript and custom source dir
+By default the plugin will use .js as file extension for the handler while bundling the entry scripts. To use a different filetype you can specify the extension in the `serverless.yml`. Also it is possible to specify the basedir used to resolve the handler.
+```yaml
+custom:
+  webpack:
+    handlerFileExtension: .ts
+    sourceDir: src
+```
+
 If you want to further optimize the bundle and are using ES6 features, you can use the [UglifyJS Webpack Plugin](https://github.com/webpack-contrib/uglifyjs-webpack-plugin) together with the harmony branch of [UglifyJS 2](https://github.com/mishoo/UglifyJS2#harmony) or the [Babili Webpack Plugin](https://github.com/webpack-contrib/babili-webpack-plugin).

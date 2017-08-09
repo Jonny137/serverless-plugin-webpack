@@ -47,8 +47,6 @@ test('service package with existing package and include/exclude', () => {
 
 test('fnPath', () => {
   expect(service.fnPath(fns.firstGet)).toBe('functions/first/get.js');
-  expect(service.fnPath(fns.firstGet, '.js')).toBe('functions/first/get.js');
-  expect(service.fnPath(fns.firstGet, '.ts')).toBe('functions/first/get.ts');
 });
 
 test('setFnsPackage', () => {
@@ -79,15 +77,15 @@ test('setFnsPackage', () => {
 
 test('setArtifacts', () => {
   const artifactFns = {
-    firstGet: { artifact: '/.serverless/.webpack/service-dev-firstGet.zip' },
-    secondGet: { artifact: '/.serverless/.webpack/service-dev-secondGet.zip' },
-    post: { artifact: '/.serverless/.webpack/service-dev-post.zip' },
+    firstGet: { package: { artifact: '/.serverless/.webpack/service-dev-firstGet.zip' } },
+    secondGet: { package: { artifact: '/.serverless/.webpack/service-dev-secondGet.zip' } },
+    post: { package: { artifact: '/.serverless/.webpack/service-dev-post.zip' } },
   };
 
   const modifiedArtifactFns = {
-    firstGet: { artifact: path.join('/.serverless', 'service-dev-firstGet.zip') },
-    secondGet: { artifact: path.join('/.serverless', 'service-dev-secondGet.zip') },
-    post: { artifact: path.join('/.serverless', 'service-dev-post.zip') },
+    firstGet: { package: path.join('/.serverless', 'service-dev-firstGet.zip') },
+    secondGet: { package: path.join('/.serverless', 'service-dev-secondGet.zip') },
+    post: { package: path.join('/.serverless', 'service-dev-post.zip') },
   };
   expect(service.setFnsArtifacts('/.serverless', artifactFns)).toEqual(modifiedArtifactFns);
 });
