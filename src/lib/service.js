@@ -26,8 +26,8 @@ const setFnsPackage = R.map(
 
 const setFnsArtifacts = (serverlessPath, fns) => R.map(
   R.over(
-    R.lensProp('package'),
-    p => path.join(serverlessPath, path.basename(p.artifact))
+    R.lensPath(['package', 'artifact']),
+    artifact => path.join(serverlessPath, path.basename(artifact))
   ),
   fns
 );

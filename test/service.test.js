@@ -83,9 +83,9 @@ test('setArtifacts', () => {
   };
 
   const modifiedArtifactFns = {
-    firstGet: { package: path.join('/.serverless', 'service-dev-firstGet.zip') },
-    secondGet: { package: path.join('/.serverless', 'service-dev-secondGet.zip') },
-    post: { package: path.join('/.serverless', 'service-dev-post.zip') },
+    firstGet: { package: { artifact: path.join('/.serverless', 'service-dev-firstGet.zip') } },
+    secondGet: { package: { artifact: path.join('/.serverless', 'service-dev-secondGet.zip') } },
+    post: { package: { artifact: path.join('/.serverless', 'service-dev-post.zip') } },
   };
   expect(service.setFnsArtifacts('/.serverless', artifactFns)).toEqual(modifiedArtifactFns);
 });
