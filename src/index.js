@@ -40,8 +40,8 @@ class ServerlessPluginWebpack {
       this.custom.config || webpackDefaultConfig
     ));
 
-    const handlerFileExtension = this.custom.config.handlerFileExtension || '.js'
-    const sourceDir = this.custom.config.sourceDir || ''
+    const handlerFileExtension = this.custom.handlerFileExtension || '.js'
+    const sourceDir = this.custom.sourceDir || ''
 
     // Save original service path and functions
     this.originalServicePath = this.serverless.config.servicePath;
